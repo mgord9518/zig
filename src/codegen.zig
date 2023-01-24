@@ -936,7 +936,9 @@ fn lowerDeclRef(
     }
 
     module.markDeclAlive(decl);
-
+    if (bin_file.cast(link.File.MachO)) |macho_file| {
+        try decl.link.macho.ensureInitialized(macho_file);
+    }
     const vaddr = try bin_file.getDeclVAddr(decl_index, .{
         .parent_atom_index = reloc_info.parent_atom_index,
         .offset = code.items.len,
